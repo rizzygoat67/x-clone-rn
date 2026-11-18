@@ -1,5 +1,27 @@
+// PUT THIS AT THE VERY TOP OF THE FILE
+import dns from "node:dns/promises";
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
+
 import express from "express";
+import { ENV } from "./config/env.js";
+import { connectDB } from "./config/db.js";
 
 const app = express();
 
-app.listen(5001, () => console.log("Server is running on PORT:5001"));
+app.get("/", (req, res) => res.send("Hello from server"));
+
+const startServer = async () => {
+  try {
+    await connectDB();
+
+    // listen for local development
+    if (ENV.NODE_ENV !== "production") {
+      app.listen(ENV.PORT, () => console.log("Server is up and running on PORT:", ENV.PORT));
+    }
+  } catch (error) {
+    console.error("Failed to start server 1:", error.message);
+    process.exit(1);
+  }
+};
+
+startServer();
