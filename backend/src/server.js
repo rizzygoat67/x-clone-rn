@@ -8,6 +8,7 @@ import { connectDB } from "./config/db.js";
 
 const app = express();
 
+app.listen(5001, () => console.log("Server is running on PORT:5001"));
 app.get("/", (req, res) => res.send("Hello from server"));
 
 const startServer = async () => {
